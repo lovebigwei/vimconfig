@@ -135,3 +135,6 @@ nnoremap <C-g> :NERDTreeToggleVCS<CR>
 " set wildmode=longest,full,full
 " set wildmode=longest,list,full
 set wildmenu
+
+" easy expansion of active file directory
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
