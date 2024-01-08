@@ -132,3 +132,6 @@ nnoremap bd :ls<CR>:bdelete<Space>
 nnoremap <Leader>b :ls<CR>:b<Space>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-g> :NERDTreeToggleVCS<CR>
+" set wildmode=longest,full,full
+" set wildmode=longest,list,full
+set wildmenu
