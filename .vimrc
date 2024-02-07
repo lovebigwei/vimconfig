@@ -46,6 +46,7 @@ Plugin 'vim-scripts/DoxygenToolkit.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
+Plugin 'preservim/tagbar'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -106,8 +107,11 @@ set completeopt-=preview
 map <F4> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
 autocmd FileType java,c,cpp set commentstring=//\ %s
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
-" set runtime path
+" set path
 set path+=~/workspace/data-management/airflow_dags/airflow_dags_data_verification
+set path+=~/workspace/perception_2025
+" easy expansion of active file directory
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " 允许隐藏被修改过的 buffer
 set hidden
@@ -132,9 +136,14 @@ nnoremap bd :ls<CR>:bdelete<Space>
 nnoremap <Leader>b :ls<CR>:b<Space>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-g> :NERDTreeToggleVCS<CR>
-" set wildmode=longest,full,full
-" set wildmode=longest,list,full
-set wildmenu
 
-" easy expansion of active file directory
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+
+nmap <F8> :TagbarToggle<CR>
+
+" set wildmode=longest,full,full
+set wildmode=longest,list,full
+set wildmenu
