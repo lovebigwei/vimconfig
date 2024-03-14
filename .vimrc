@@ -47,6 +47,7 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'preservim/tagbar'
+Plugin 'tell-k/vim-autopep8'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -147,3 +148,16 @@ nmap <F8> :TagbarToggle<CR>
 " set wildmode=longest,full,full
 set wildmode=longest,list,full
 set wildmenu
+
+" Auto-format Python files with autopep8
+autocmd FileType python noremap <buffer> <Leader>py :call Autopep8()<CR>
+
+"visual selection
+xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+function! s:VSetSearch(cmdtype)
+    let temp = @s
+    norm! gv"sy
+    let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+    let @s = temp
+endfunction
