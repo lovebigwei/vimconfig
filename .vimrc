@@ -49,6 +49,7 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'preservim/tagbar'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'tpope/vim-surround'
+Plugin 'ludovicchabant/vim-gutentags'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -136,7 +137,7 @@ nnoremap <silent> <C-K> :bprev<CR>
 nnoremap bd :ls<CR>:bdelete<Space>
 
 nnoremap <Leader>b :ls<CR>:b<Space>
-nnoremap <C-t> :NERDTreeToggle<CR>
+" nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-g> :NERDTreeToggleVCS<CR>
 
 noremap <Up> <NOP>
@@ -148,7 +149,7 @@ nmap <F8> :TagbarToggle<CR>
 
 " set wildmode=longest,full,full
 set wildmode=longest,list,full
-set wildmenu
+" set wildmenu
 
 " Auto-format Python files with autopep8
 autocmd FileType python noremap <buffer> <Leader>py :call Autopep8()<CR>
@@ -162,3 +163,21 @@ function! s:VSetSearch(cmdtype)
     let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
     let @s = temp
 endfunction
+" gutentags搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归 "
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.project']
+
+" 所生成的数据文件的名称 "
+let g:gutentags_ctags_tagfile = '.tags'
+
+" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录 "
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+" 检测 ~/.cache/tags 不存在就新建 "
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+endif
+
+" 配置 ctags 的参数 "
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+pxI']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
