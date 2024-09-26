@@ -11,7 +11,7 @@ set tabstop=4        " tab width is 4 spaces
 set shiftwidth=4     " indent also with 4 spaces
 set expandtab        " expand tabs to spaces
 " wrap lines at 120 chars. 80 is somewaht antiquated with nowadays displays.
-set textwidth=120
+set textwidth=500
 " turn syntax highlighting on
 set t_Co=256
 syntax on
@@ -50,6 +50,9 @@ Plugin 'preservim/tagbar'
 Plugin 'tell-k/vim-autopep8'
 Plugin 'tpope/vim-surround'
 Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'morhetz/gruvbox'
+Plugin 'nordtheme/vim'
+Plugin 'frazrepo/vim-rainbow'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -113,6 +116,7 @@ set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 " set path
 set path+=~/workspace/data-management/airflow_dags/airflow_dags_data_verification
 set path+=~/workspace/perception_2025
+set path+=~/workspace/perception_2025/python
 " easy expansion of active file directory
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
@@ -181,3 +185,8 @@ endif
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+pxI']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+let g:gutentags_file_list_command = 'rg --files'
+
+let g:rainbow_active = 1
+colorscheme gruvbox
+set background=dark
