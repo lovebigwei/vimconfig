@@ -53,6 +53,9 @@ Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'morhetz/gruvbox'
 Plugin 'nordtheme/vim'
 Plugin 'frazrepo/vim-rainbow'
+Plugin 'junegunn/vim-peekaboo'
+Plugin 'CoderCookE/vim-chatgpt'
+Plugin 'takac/vim-hardtime'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -188,5 +191,35 @@ let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 let g:gutentags_file_list_command = 'rg --files'
 
 let g:rainbow_active = 1
+let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
 set background=dark
+autocmd vimenter * ++nested colorscheme gruvbox
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (getenv('TERM_PROGRAM') != 'Apple_Terminal')
+  if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    " set t_8f=[38;2;%lu;%lu;%lum
+    " set t_8b=[48;2;%lu;%lu;%lum
+    set termguicolors
+  endif
+endif
+
+inoremap <c-u> <c-g>u<c-u>
+inoremap <c-w> <c-g>u<c-w>
+"gpt config
+let g:api_type = 'azure'
+let g:chat_gpt_key = '09af3d0c568e4f69ba9ab88a4665541f'
+let g:azure_endpoint = 'https://azureoai-bamboost-1.openai.azure.com/'
+let g:azure_deployment = 'GPT-4-32K'
+let g:azure_api_version = '2024-05-01-preview'
+"hard time on
+let g:hardtime_default_on = 1
