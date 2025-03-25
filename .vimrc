@@ -18,6 +18,7 @@ syntax on
 " colorscheme wombat256
 " turn line numbers on
 set number
+set relativenumber
 " highlight matching braces
 set showmatch
 " intelligent comments
@@ -27,7 +28,7 @@ filetype off                  " required
 set pastetoggle=<f5>
 filetype indent on
 set hls
-set hidden
+set incsearch
 " set mouse+=a
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -56,6 +57,7 @@ Plugin 'frazrepo/vim-rainbow'
 Plugin 'junegunn/vim-peekaboo'
 Plugin 'CoderCookE/vim-chatgpt'
 Plugin 'takac/vim-hardtime'
+Plugin 'prabirshrestha/vim-lsp'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -138,8 +140,8 @@ nnoremap <silent> bn :bnext<CR>
 " normal 模式下使用 bn 切换到上一个 Buffer
 nnoremap <silent> bp :bprevious<CR>
 
-nnoremap <silent> <C-J> :bnext<CR>
-nnoremap <silent> <C-K> :bprev<CR>
+nnoremap <silent> <C-j> <C-e>
+nnoremap <silent> <C-k> <C-y>
 " normal 模式下使用 bd 关闭当前 Buffer
 nnoremap bd :ls<CR>:bdelete<Space>
 
@@ -151,6 +153,8 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
+nnoremap gb M:b# <CR>
+nnoremap <C-]> *<C-]>
 
 nmap <F8> :TagbarToggle<CR>
 
@@ -160,6 +164,9 @@ set wildmode=longest,list,full
 
 " Auto-format Python files with autopep8
 autocmd FileType python noremap <buffer> <Leader>py :call Autopep8()<CR>
+
+" Auto-format Python files with LSP
+autocmd BufWritePost *.py LspDocumentFormat
 
 "visual selection
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
@@ -207,19 +214,30 @@ if (getenv('TERM_PROGRAM') != 'Apple_Terminal')
   "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
   " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
   if (has("termguicolors"))
-    " set t_8f=[38;2;%lu;%lu;%lum
-    " set t_8b=[48;2;%lu;%lu;%lum
+    " set t_8f=␛[38;2;%lu;%lu;%lum
+    " set t_8b=␛[48;2;%lu;%lu;%lum
     set termguicolors
   endif
+endif
+
+if executable('ruff')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'ruff',
+        \ 'cmd': {server_info->['ruff', 'server']},
+        \ 'allowlist': ['python'],
+        \ 'workspace_config': {},
+        \ })
 endif
 
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 "gpt config
 let g:api_type = 'azure'
-let g:chat_gpt_key = '09af3d0c568e4f69ba9ab88a4665541f'
-let g:azure_endpoint = 'https://azureoai-bamboost-1.openai.azure.com/'
+let g:chat_gpt_key = ''
+let g:azure_endpoint = ''
 let g:azure_deployment = 'GPT-4-32K'
 let g:azure_api_version = '2024-05-01-preview'
 "hard time on
-let g:hardtime_default_on = 1
+let g:hardtime_default_on = 0
+" disable diagnostics support
+let g:lsp_diagnostics_enabled = 0
