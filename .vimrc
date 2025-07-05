@@ -58,6 +58,9 @@ Plugin 'junegunn/vim-peekaboo'
 Plugin 'CoderCookE/vim-chatgpt'
 Plugin 'takac/vim-hardtime'
 Plugin 'prabirshrestha/vim-lsp'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'tpope/vim-unimpaired'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -119,7 +122,6 @@ map <F4> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
 autocmd FileType java,c,cpp set commentstring=//\ %s
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 " set path
-set path+=~/workspace/data-management/airflow_dags/airflow_dags_data_verification
 set path+=~/workspace/perception_2025
 set path+=~/workspace/perception_2025/python
 " easy expansion of active file directory
@@ -127,6 +129,8 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " 允许隐藏被修改过的 buffer
 set hidden
+
+nnoremap <Leader>tn :call ToggleRelativeNumber()<CR>
 
 " normal 模式下使用 bl 列出 Buffer 列表
 nnoremap <silent> bl :ls<CR>
@@ -140,8 +144,8 @@ nnoremap <silent> bn :bnext<CR>
 " normal 模式下使用 bn 切换到上一个 Buffer
 nnoremap <silent> bp :bprevious<CR>
 
-nnoremap <silent> <C-j> <C-e>
-nnoremap <silent> <C-k> <C-y>
+" nnoremap <silent> <C-j> <C-e>
+" nnoremap <silent> <C-k> <C-y>
 " normal 模式下使用 bd 关闭当前 Buffer
 nnoremap bd :ls<CR>:bdelete<Space>
 
@@ -165,8 +169,6 @@ set wildmode=longest,list,full
 " Auto-format Python files with autopep8
 autocmd FileType python noremap <buffer> <Leader>py :call Autopep8()<CR>
 
-" Auto-format Python files with LSP
-autocmd BufWritePost *.py LspDocumentFormat
 
 "visual selection
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
@@ -229,6 +231,15 @@ if executable('ruff')
         \ })
 endif
 
+" Function to toggle relative line numbers
+function! ToggleRelativeNumber()
+  if(&relativenumber == 0)
+    set relativenumber
+  else
+    set norelativenumber
+  endif
+endfunction
+
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 "gpt config
@@ -241,3 +252,16 @@ let g:azure_api_version = '2024-05-01-preview'
 let g:hardtime_default_on = 0
 " disable diagnostics support
 let g:lsp_diagnostics_enabled = 0
+"disable auto lsp
+let g:lsp_auto_enable = 0
+" Auto-format Python files with LSP
+" autocmd BufWritePost *.py LspDocumentFormat
+
+
+" set clipboard=unnamed
+" set clipboard=unnamedplus
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+      \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+" autocmd BufReadPost fugitive://* set bufhidden=delete
