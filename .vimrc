@@ -1,3 +1,7 @@
+" Source the vimrc file after saving it
+if has("autocmd")
+  autocmd bufwritepost .vimrc source $MYVIMRC
+endif
 " set UTF-8 encoding
 set enc=utf-8
 set fenc=utf-8
@@ -41,7 +45,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'preservim/nerdtree'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-fugitive'
-Plugin 'Syntastic'
+" Plugin 'Syntastic'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-scripts/DoxygenToolkit.vim'
 Plugin 'Valloric/YouCompleteMe'
@@ -55,12 +59,17 @@ Plugin 'morhetz/gruvbox'
 Plugin 'nordtheme/vim'
 Plugin 'frazrepo/vim-rainbow'
 Plugin 'junegunn/vim-peekaboo'
-Plugin 'CoderCookE/vim-chatgpt'
+" Plugin 'CoderCookE/vim-chatgpt'
 Plugin 'takac/vim-hardtime'
 Plugin 'prabirshrestha/vim-lsp'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'tpope/vim-unimpaired'
+Plugin 'andymass/vim-matchup'
+" Plugin 'rishi-opensource/vim-claude-code'
+Plugin 'github/copilot.vim'
+" Plugin 'madox2/vim-ai'
+" Plugin 'DanBradbury/copilot-chat.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -76,13 +85,13 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 0
+" let g:syntastic_check_on_wq = 0
 let g:DoxygenToolkit_authorName = "BATW Hancao Tong"
 let s:licenseTag = "\<enter>"
 let s:licenseTag = s:licenseTag . "CONFIDENTIAL - BATW COMPANY\<enter>"
@@ -124,9 +133,16 @@ set grepprg=rg\ --vimgrep\ --smart-case\ --follow
 " set path
 set path+=~/workspace/perception_2025
 set path+=~/workspace/perception_2025/python
+set path+=/home/qxz4b0b/workspace/IKS_DEBUG/kpi-scripts/src
 " easy expansion of active file directory
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-
+cnoremap <expr> %p getcmdtype() == ':' ? expand('%:p') : '%p'
+nmap <leader>f :find %%
+" nmap <leader>e :edit %%
+" nmap <leader>es :sp %%
+" nmap <leader>ev :vsp %%
+" nnoremap <leader>f :Files<CR>
+nnoremap <silent> f<C-f> :Files<CR>
 " 允许隐藏被修改过的 buffer
 set hidden
 
@@ -147,9 +163,11 @@ nnoremap <silent> bp :bprevious<CR>
 " nnoremap <silent> <C-j> <C-e>
 " nnoremap <silent> <C-k> <C-y>
 " normal 模式下使用 bd 关闭当前 Buffer
-nnoremap bd :ls<CR>:bdelete<Space>
+" nnoremap bd :ls<CR>:bdelete<Space>
+nnoremap bd :ls<CR>:bwipeout!<Space>
 
 nnoremap <Leader>b :ls<CR>:b<Space>
+nnoremap  <silent> <Leader>B :Buffers<CR>
 " nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-g> :NERDTreeToggleVCS<CR>
 
@@ -162,8 +180,10 @@ nnoremap <C-]> *<C-]>
 
 nmap <F8> :TagbarToggle<CR>
 
-" set wildmode=longest,full,full
-set wildmode=longest,list,full
+" bash config
+set wildmode=longest,list
+" zsh config
+" set wildmode=full
 " set wildmenu
 
 " Auto-format Python files with autopep8
@@ -201,9 +221,11 @@ let g:gutentags_file_list_command = 'rg --files'
 
 let g:rainbow_active = 1
 let g:gruvbox_contrast_dark = 'hard'
-colorscheme gruvbox
-set background=dark
-autocmd vimenter * ++nested colorscheme gruvbox
+if (!has("nvim"))
+  colorscheme gruvbox
+  set background=dark
+  autocmd vimenter * ++nested colorscheme gruvbox
+endif
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
 "(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
@@ -265,3 +287,50 @@ let g:lsp_auto_enable = 0
 autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
       \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 " autocmd BufReadPost fugitive://* set bufhidden=delete
+let g:matchup_delim_stopline      = 15000 " generally
+let g:copilot_enterprise_uri = 'https://bmw.ghe.com'
+let g:vim_ai_chat = {
+\  "provider": "openai",
+\  "prompt": "",
+\  "options": {
+\    "endpoint_url": "https://azureoai-gear-1.openai.azure.com/openai/deployments/gpt-5.4/chat/completions?api-version=2025-04-01-preview",
+\ }
+\}
+let g:vim_ai_edit = {
+\  "provider": "openai",
+\  "prompt": "",
+\  "options": {
+\    "endpoint_url": "https://azureoai-gear-1.openai.azure.com/openai/deployments/gpt-5.4/chat/completions?api-version=2025-04-01-preview",
+\ }
+\}
+let g:vim_ai_complete = {
+\  "provider": "openai",
+\  "prompt": "",
+\  "options": {
+\    "endpoint_url": "https://azureoai-gear-1.openai.azure.com/openai/deployments/gpt-5.4/chat/completions?api-version=2025-04-01-preview",
+\ }
+\}
+
+" complete text on the current line or in visual selection
+nnoremap <leader>a :AI
+xnoremap <leader>a :AI
+cnoremap <leader>a AI
+
+" edit text with a custom prompt
+xnoremap <leader>e :AIEdit
+nnoremap <leader>e :AIEdit
+cnoremap <leader>e AIEdit
+
+" trigger chat
+xnoremap <leader>c :AIChat
+nnoremap <leader>c :AIChat
+cnoremap <leader>c AIChat
+
+" redo last AI command
+nnoremap <leader>r :AIRedo<CR>
+tnoremap <Esc> <C-\><C-n>
+if !has('nvim')
+  nnoremap <leader>t :terminal ++curwin<CR>
+else
+  nnoremap <leader>t :terminal<CR>
+endif
