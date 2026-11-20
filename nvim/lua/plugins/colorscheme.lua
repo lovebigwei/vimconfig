@@ -12,8 +12,11 @@ return {
   {
     "morhetz/gruvbox",
     enabled = true,
+    lazy = false,
     init = function()
       vim.g.gruvbox_contrast_dark = "hard"
+    end,
+    config = function()
       vim.cmd.colorscheme("gruvbox")
     end,
   },

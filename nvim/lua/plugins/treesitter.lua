@@ -11,22 +11,18 @@ return {
 
       -- Define the languages you want to automatically manage
       local languages = { "lua", "vim", "vimdoc", "bash", "c", "cpp", "python", "json", "yaml", "markdown" }
+      local filetypes = { "lua", "vim", "help", "sh", "c", "cpp", "python", "json", "yaml", "markdown" }
       
       -- Installs your languages automatically
       ts.install(languages)
 
-      -- Enable highlighting and indentation native features via autocommand
+      -- Enable native Treesitter highlighting for these file types.
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = languages,
+        pattern = filetypes,
         callback = function()
-          -- Turn on native Neovim treesitter highlighting
           vim.treesitter.start()
-          
-          -- Turn on treesitter-based smart indentation
-          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
     end,
   },
 }
-
