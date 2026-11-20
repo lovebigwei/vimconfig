@@ -8,6 +8,7 @@ vim.opt.fileencoding = "utf-8"
 -- Indentation
 vim.opt.autoindent = true
 vim.opt.smartindent = true
+-- vim.cmd("filetype plugin indent on")
 
 -- Tabs/spaces
 vim.opt.tabstop = 4
@@ -40,19 +41,18 @@ vim.opt.background = "dark"
 vim.opt.grepprg = "rg --vimgrep --smart-case --follow"
 
 -- Search path
-vim.opt.path:append("~/workspace/perception_2025")
-vim.opt.path:append("~/workspace/perception_2025/python")
-vim.opt.path:append("/home/qxz4b0b/workspace/IKS_DEBUG/kpi-scripts/src")
+-- vim.opt.path:append("~/workspace/perception_2025")
+-- vim.opt.path:append("~/workspace/perception_2025/python")
+-- vim.opt.path:append("/home/qxz4b0b/workspace/IKS_DEBUG/kpi-scripts/src")
 
 -- Command-line completion style
 vim.opt.wildmode = { "longest", "list" }
 
 -- True color
 if vim.env.TERM_PROGRAM ~= "Apple_Terminal" then
-  vim.opt.termguicolors = true
+	vim.opt.termguicolors = true
 end
 
 -- Optional clipboard.
 -- Uncomment if you want system clipboard integration.
 -- vim.opt.clipboard = "unnamedplus"
-

@@ -17,18 +17,6 @@ autocmd("FileType", {
   end,
 })
 
--- Python autopep8 mapping.
--- Requires tell-k/vim-autopep8 plugin.
--- autocmd("FileType", {
---   pattern = "python",
---   callback = function()
---     vim.keymap.set("n", "<Leader>py", "<cmd>call Autopep8()<CR>", {
---       buffer = true,
---       desc = "Autopep8 format",
---     })
---   end,
--- })
-
 -- Visual selection search using * and #
 -- Kept as Vimscript because it is simple and reliable.
 
@@ -51,4 +39,3 @@ vim.cmd([[
 autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
       \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 ]])
-
